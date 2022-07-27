@@ -711,6 +711,15 @@ async def osuSubmitModularSelector(
     score.bmap = bmap
     score.player = player
 
+    # exit early if score was failed
+    if not score.passed and app.settings.IGNORE_FAILED:
+        log(
+            f"[{score.mode!r}] {score.player} submitted a failed score (ignoring) ",
+            Ansi.LYELLOW,
+        )
+
+        return
+
     ## perform checksum validation
 
     unique_id1, unique_id2 = unique_ids.split("|", maxsplit=1)

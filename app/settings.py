@@ -57,3 +57,7 @@ DEVELOPER_MODE = config("DEVELOPER_MODE", cast=bool)
 ##          the migrations system works.
 ##          you'll regret it.
 VERSION = "4.5.6"
+
+# Extra options
+IGNORE_FAILED: bool = config("IGNORE_FAILED", cast=bool, default=False)
+IGNORE_STRANGE: bool = config("IGNORE_STRANGE", cast=bool, default=False)

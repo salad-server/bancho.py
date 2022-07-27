@@ -189,6 +189,10 @@ async def fetch_geoloc_web(ip: IPAddress) -> Optional[Geolocation]:
 
 
 async def log_strange_occurrence(obj: object) -> None:
+    if app.settings.IGNORE_STRANGE:
+        log("Found strange, ignoring due to .env", Ansi.LYELLOW)
+        return
+
     pickled_obj: bytes = pickle.dumps(obj)
     uploaded = False
 
