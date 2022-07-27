@@ -4,6 +4,8 @@ import math
 from typing import Optional
 from typing import TypedDict
 
+from app.usecases.taiko import Taiko
+
 try:  # TODO: ask asottile about this
     from oppai_ng.oppai import OppaiWrapper
 except ModuleNotFoundError:
@@ -79,7 +81,6 @@ def calculate_performances_taiko(
     scores: list[StdTaikoCatchScore],
 ) -> list[DifficultyRating]:
     beatmap = PeaceMap(osu_file_path)  # type: ignore
-
     results: list[DifficultyRating] = []
 
     for score in scores:
@@ -94,9 +95,15 @@ def calculate_performances_taiko(
         )
 
         result = calculator.calculate(beatmap)
+        taiko = Taiko(
+            len(beatmap.hit_objects),
+            score["nmiss"] or 0,
+            beatmap.od or 0,
+            score["acc"] or 0
+        )
 
-        pp = result.pp
         sr = result.stars
+        pp = taiko.calculate(result.stars, score["mods"] or 0)
 
         if math.isnan(pp) or math.isinf(pp):
             # TODO: report to logserver
